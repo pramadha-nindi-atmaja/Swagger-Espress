@@ -1,7 +1,7 @@
 import express from "express";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import { create, getAll, getById, remove, update } from "./users.js";
+import { create, getAll, getById, remove, update, search } from "./users.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -183,6 +183,33 @@ app.put("/users/:id", update);
  *         description: The user was not found
  */
 app.delete("/users/:id", remove);
+
+/**
+ * @swagger
+ * /users/search:
+ *   get:
+ *     summary: Search users by name or email
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Search term for user name or email
+ *     responses:
+ *       200:
+ *         description: The list of matched users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Query parameter is required
+ */
+app.get("/users/search", search);
 
 app.get("/", (req, res) => {
   res.send("Hello World");

@@ -70,3 +70,19 @@ export const remove = (req, res) => {
   users = users.filter((user) => user.id !== id);
   return res.json({ message: "User deleted successfully" });
 };
+
+export const search = (req, res) => {
+  const { q } = req.query;
+  
+  if (!q) {
+    return res.status(400).json({ message: "Query parameter 'q' is required" });
+  }
+  
+  const searchTerm = q.toLowerCase();
+  const filteredUsers = users.filter(user => 
+    user.name.toLowerCase().includes(searchTerm) || 
+    user.email.toLowerCase().includes(searchTerm)
+  );
+  
+  return res.json(filteredUsers);
+};
